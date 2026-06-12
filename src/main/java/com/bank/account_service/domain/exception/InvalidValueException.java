@@ -5,9 +5,9 @@ import org.springframework.http.HttpStatus;
 import lombok.Getter;
 
 @Getter
-public class InvalidException extends ApiException {
+public class InvalidValueException extends ApiException {
 
-    public InvalidException(String resource, String field, String value) {
+    public InvalidValueException(String resource, String field, String value) {
         super(value + " es inválido para campo " + field + " de " + resource);
     }
 
