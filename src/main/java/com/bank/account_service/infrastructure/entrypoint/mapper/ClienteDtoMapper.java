@@ -1,9 +1,9 @@
-package com.bank.account_service.shared.mapper;
+package com.bank.account_service.infrastructure.entrypoint.mapper;
 
 import com.bank.account_service.domain.model.Cliente;
-import com.bank.account_service.shared.dto.ClienteDTO;
+import com.bank.account_service.infrastructure.entrypoint.dto.ClienteDTO;
 
-public class ClienteMapper {
+public class ClienteDtoMapper {
     public static ClienteDTO toDTO(Cliente cliente) {
         return new ClienteDTO(
                 cliente.getDni(),

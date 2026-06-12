@@ -8,6 +8,7 @@ import com.bank.account_service.domain.model.Cliente;
 import com.bank.account_service.domain.port.out.ClienteRepositoryPort;
 
 public class GetClienteByDniUseCase {
+
     private final ClienteRepositoryPort repository;
 
     public GetClienteByDniUseCase(ClienteRepositoryPort repository) {

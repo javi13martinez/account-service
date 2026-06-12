@@ -1,4 +1,4 @@
-package com.bank.account_service.infrastructure.entrypoint;
+package com.bank.account_service.infrastructure.entrypoint.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -7,10 +7,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bank.account_service.application.usecase.GetClienteByDniUseCase;
 import com.bank.account_service.domain.model.Cliente;
-import com.bank.account_service.shared.dto.ClienteDTO;
-import com.bank.account_service.shared.mapper.ClienteMapper;
+import com.bank.account_service.infrastructure.entrypoint.controller.GlobalExceptionHandler.ErrorResponse;
+import com.bank.account_service.infrastructure.entrypoint.dto.ClienteDTO;
+import com.bank.account_service.infrastructure.entrypoint.mapper.ClienteDtoMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,31 +29,34 @@ public class ClienteController {
     }
 
     @Operation(
-            summary = "Get cliente by DNI",
+            summary = "GET CLIENTE BY DNI",
             description = "Devuelve un cliente identificado por su DNI"
     )
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
-                    description = "Cliente found"
+                    description = "CLIENTE FOUND",
+                    content = @Content(schema = @Schema(implementation = ClienteDTO.class))
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Cliente not found"
+                    description = "CLIENTE NOT FOUND",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Invalid DNI"
+                    description = "INVALID DNI",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
             )
     })
     @GetMapping("/{dni}")
     public ClienteDTO getByDni(
             @Parameter(
-                description = "Cliente DNI",
+                description = "DNI",
                 example = "11111111A"
             )
             @PathVariable String dni) {
         Cliente cliente = useCase.execute(dni);
-        return ClienteMapper.toDTO(cliente);
+        return ClienteDtoMapper.toDTO(cliente);
     }
 }

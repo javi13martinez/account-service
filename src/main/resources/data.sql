@@ -5,11 +5,11 @@ INSERT INTO CLIENTES (dni, nombre, apellido1, apellido2, fecha_nacimiento) VALUE
 ('44444444D', 'Raquel', 'Ruiz', 'Herrera', '2002-06-21'),
 ('55555555E', 'María', 'Sánchez', 'Torres', '1999-08-08');
 
--- INSERT INTO CUENTAS_BANCARIAS (idCliente, tipoCuenta, total) VALUES
--- ('11111111A', 'PREMIUM', 150000),
--- ('11111111A', 'NORMAL', 20000),
--- ('22222222B', 'NORMAL', 50000),
--- ('22222222B', 'JUNIOR', 300),
--- ('33333333C', 'JUNIOR', 300),
--- ('44444444D', 'NORMAL', 75000),
--- ('55555555E', 'PREMIUM', 120000);
+INSERT INTO CUENTAS_BANCARIAS (dni_cliente, tipo_cuenta, total) VALUES
+('11111111A', 'PREMIUM', 150000),
+('11111111A', 'NORMAL', 20000),
+('22222222B', 'NORMAL', 50000),
+('22222222B', 'JUNIOR', 300),
+('33333333C', 'JUNIOR', 300),
+('44444444D', 'NORMAL', 75000),
+('55555555E', 'PREMIUM', 120000);

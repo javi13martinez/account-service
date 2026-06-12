@@ -1,4 +1,4 @@
-package com.bank.account_service.infrastructure.entrypoint;
+package com.bank.account_service.infrastructure.entrypoint.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
