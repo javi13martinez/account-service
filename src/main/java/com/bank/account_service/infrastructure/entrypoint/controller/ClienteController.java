@@ -69,8 +69,8 @@ public class ClienteController {
     }
 
     @Operation(
-            summary = "GET CLIENTE BY DNI",
-            description = "Devuelve un cliente identificado por su DNI"
+            summary = "GET CLIENTES",
+            description = "Devuelve lista de los clientes activos"
     )
     @ApiResponses({
             @ApiResponse(
