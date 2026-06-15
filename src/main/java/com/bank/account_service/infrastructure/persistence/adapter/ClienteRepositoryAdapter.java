@@ -1,5 +1,6 @@
 package com.bank.account_service.infrastructure.persistence.adapter;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +32,13 @@ public class ClienteRepositoryAdapter implements ClienteRepositoryPort {
     }
 
     @Override
-    public Cliente save(Cliente cliente) {
-        return ClienteEntityMapper.toDomain(jpaRepository.save(ClienteEntityMapper.toEntity(cliente)));
+    public List<Cliente> findAdultos() {
+        return jpaRepository.findByFechaNacimientoBefore(LocalDate.now().minusYears(18))
+                .stream().map(ClienteEntityMapper::toDomain).toList();
+    }
+
+    @Override
+    public void save(Cliente cliente) {
+        ClienteEntityMapper.toDomain(jpaRepository.save(ClienteEntityMapper.toEntity(cliente)));
     }
 }

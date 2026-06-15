@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bank.account_service.application.usecase.GetClienteByDniUseCase;
+import com.bank.account_service.application.usecase.GetClientesAdultosUseCase;
 import com.bank.account_service.application.usecase.GetClientesUseCase;
 import com.bank.account_service.domain.model.Cliente;
 import com.bank.account_service.infrastructure.entrypoint.controller.GlobalExceptionHandler.ErrorResponse;
@@ -25,15 +26,18 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/clientes")
 @Tag(name = "Clientes", description = "Gestión de clientes")
 public class ClienteController {
-    private final GetClientesUseCase getClientesUseCase;
     private final GetClienteByDniUseCase getClienteByDniUseCase;
+    private final GetClientesUseCase getClientesUseCase;
+    private final GetClientesAdultosUseCase getClientesAdultosUseCase;
 
     public ClienteController(
+            GetClienteByDniUseCase getClienteByDniUseCase,
             GetClientesUseCase getClientesUseCase,
-            GetClienteByDniUseCase getClienteByDniUseCase
+            GetClientesAdultosUseCase getClientesAdultosUseCase
     ) {
         this.getClientesUseCase = getClientesUseCase;
         this.getClienteByDniUseCase = getClienteByDniUseCase;
+        this.getClientesAdultosUseCase = getClientesAdultosUseCase;
     }
 
     @Operation(
@@ -82,5 +86,21 @@ public class ClienteController {
     @GetMapping
     public List<ClienteDTO> getClientes() {
         return getClientesUseCase.execute().stream().map(ClienteDtoMapper::toDTO).toList();
+    }
+
+    @Operation(
+            summary = "GET CLIENTES",
+            description = "Devuelve lista de los clientes mayores de edad"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "CLIENTES FOUND",
+                    content = @Content(schema = @Schema(implementation = ClienteDTO.class))
+            )
+    })
+    @GetMapping("/mayores-de-edad")
+    public List<ClienteDTO> getClientesMayoresDeEdad() {
+        return getClientesAdultosUseCase.execute().stream().map(ClienteDtoMapper::toDTO).toList();
     }
 }

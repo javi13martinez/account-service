@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.bank.account_service.application.usecase.CreateCuentaBancariaUseCase;
 import com.bank.account_service.application.usecase.GetClienteByDniUseCase;
+import com.bank.account_service.application.usecase.GetClientesAdultosUseCase;
 import com.bank.account_service.application.usecase.GetClientesUseCase;
 import com.bank.account_service.application.usecase.UpdateSaldoCuentaUseCase;
 import com.bank.account_service.domain.port.out.ClienteRepositoryPort;
@@ -21,6 +22,11 @@ public class UseCaseConfig {
     @Bean
     public GetClientesUseCase getClientesUseCase(ClienteRepositoryPort port) {
         return new GetClientesUseCase(port);
+    }
+
+    @Bean
+    public GetClientesAdultosUseCase getClientesAdultosUseCase(ClienteRepositoryPort port) {
+        return new GetClientesAdultosUseCase(port);
     }
 
     @Bean
