@@ -23,4 +23,9 @@ public class ClienteRepositoryAdapter implements ClienteRepositoryPort {
         return jpaRepository.findById(dni)
                 .map(ClienteEntityMapper::toDomain);
     }
+
+    @Override
+    public Cliente create(Cliente cliente) {
+        return ClienteEntityMapper.toDomain(jpaRepository.save(ClienteEntityMapper.toEntity(cliente)));
+    }
 }

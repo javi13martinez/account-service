@@ -21,4 +21,8 @@ public class Cliente {
         this.apellido2 = apellido2;
         this.fechaNacimiento = fechaNacimiento;
     }
+
+    public Cliente(String dni) {
+        this.dni = dni;
+    }
 }

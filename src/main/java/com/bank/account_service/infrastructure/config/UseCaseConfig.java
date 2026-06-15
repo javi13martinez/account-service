@@ -17,8 +17,11 @@ public class UseCaseConfig {
     }
 
     @Bean
-    public CreateCuentaBancariaUseCase createCuentaBancariaUseCase(CuentaBancariaRepositoryPort port) {
-        return new CreateCuentaBancariaUseCase(port);
+    public CreateCuentaBancariaUseCase createCuentaBancariaUseCase(
+            CuentaBancariaRepositoryPort cuentaBancariaRepositoryPort,
+            ClienteRepositoryPort clienteRepositoryPort
+    ) {
+        return new CreateCuentaBancariaUseCase(cuentaBancariaRepositoryPort, clienteRepositoryPort);
     }
 
 }
