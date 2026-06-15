@@ -1,5 +1,7 @@
 package com.bank.account_service.infrastructure.persistence.adapter;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Repository;
 
 import com.bank.account_service.domain.model.CuentaBancaria;
@@ -17,7 +19,12 @@ public class CuentaBancariaRepositoryAdapter implements CuentaBancariaRepository
     }
 
     @Override
-    public CuentaBancaria create(final CuentaBancaria cuentaBancaria) {
+    public Optional<CuentaBancaria> findById(final Long id) {
+        return jpaRepository.findById(id.toString()).map(CuentaBancariaEntityMapper::toDomain);
+    }
+
+    @Override
+    public CuentaBancaria save(final CuentaBancaria cuentaBancaria) {
         return CuentaBancariaEntityMapper.toDomain(jpaRepository.save(CuentaBancariaEntityMapper.toEntity(cuentaBancaria)));
     }
 

@@ -25,7 +25,7 @@ public class ClienteRepositoryAdapter implements ClienteRepositoryPort {
     }
 
     @Override
-    public Cliente create(Cliente cliente) {
+    public Cliente save(Cliente cliente) {
         return ClienteEntityMapper.toDomain(jpaRepository.save(ClienteEntityMapper.toEntity(cliente)));
     }
 }

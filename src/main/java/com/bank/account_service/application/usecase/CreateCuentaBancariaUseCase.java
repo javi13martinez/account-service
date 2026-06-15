@@ -21,21 +21,21 @@ public class CreateCuentaBancariaUseCase {
     }
 
     @Transactional
-    public CuentaBancaria execute(String dniCliente, String tipoCuenta, Double total) {
+    public CuentaBancaria execute(final String dniCliente, final String tipoCuenta, final Double total) {
 
         if (!DNI_PATTERN.matcher(dniCliente).matches()) {
             throw new InvalidValueException("CUENTA BANCARIA", "DNI CLIENTE", dniCliente);
         }
 
-        if (total == null || total < 0) {
+        if (total == null) {
             throw new InvalidValueException("CUENTA BANCARIA", "TOTAL", String.valueOf(total));
         }
 
         if (clienteRepository.findByDni(dniCliente).isEmpty()) {
-            clienteRepository.create(new Cliente(dniCliente));
+            clienteRepository.save(new Cliente(dniCliente));
         }
 
-        return cuentaRepository.create(new CuentaBancaria(dniCliente, tipoCuenta, total));
+        return cuentaRepository.save(new CuentaBancaria(dniCliente, tipoCuenta, total));
     }
 
     private static final Pattern DNI_PATTERN =

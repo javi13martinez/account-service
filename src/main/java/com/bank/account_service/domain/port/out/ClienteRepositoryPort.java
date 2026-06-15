@@ -6,5 +6,5 @@ import com.bank.account_service.domain.model.Cliente;
 
 public interface ClienteRepositoryPort {
     Optional<Cliente> findByDni(final String dni);
-    Cliente create(final Cliente cliente);
+    Cliente save(final Cliente cliente);
 }
