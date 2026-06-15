@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bank.account_service.application.usecase.CreateCuentaBancariaUseCase;
 import com.bank.account_service.application.usecase.UpdateSaldoCuentaUseCase;
-import com.bank.account_service.domain.model.CuentaBancaria;
 import com.bank.account_service.infrastructure.entrypoint.controller.GlobalExceptionHandler.ErrorResponse;
 import com.bank.account_service.infrastructure.entrypoint.dto.ClienteDTO;
 import com.bank.account_service.infrastructure.entrypoint.dto.CreateCuentaBancariaDTO;
@@ -28,8 +27,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "CuentasBancarias", description = "Gestión de cuentas bancarias")
 public class CuentaBancariaController {
 
-    private final CreateCuentaBancariaUseCase createCuentaBancariaUseCase;
-    private final UpdateSaldoCuentaUseCase updateSaldoCuentaUseCase;
+    private CreateCuentaBancariaUseCase createCuentaBancariaUseCase;
+    private UpdateSaldoCuentaUseCase updateSaldoCuentaUseCase;
 
     public CuentaBancariaController(
             CreateCuentaBancariaUseCase createCuentaBancariaUseCase,

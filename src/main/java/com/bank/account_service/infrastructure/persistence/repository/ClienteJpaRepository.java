@@ -14,6 +14,15 @@ public interface ClienteJpaRepository extends JpaRepository<ClienteEntity, Strin
         SELECT c FROM ClienteEntity c
         WHERE c.fechaNacimiento <= :date
     """)
-    List<ClienteEntity> findByFechaNacimientoBefore(final LocalDate date);
+    List<ClienteEntity> findByFechaNacimientoBefore(LocalDate date);
+
+    @Query("""
+        SELECT DISTINCT c
+        FROM ClienteEntity c
+        JOIN c.cuentas cb
+        GROUP BY c
+        HAVING SUM(cb.total) > :total
+    """)
+    List<ClienteEntity> findClientesConSaldoMayorA(Double total);
 
 }

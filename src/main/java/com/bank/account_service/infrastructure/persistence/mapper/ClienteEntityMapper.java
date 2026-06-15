@@ -11,7 +11,8 @@ public class ClienteEntityMapper {
                 entity.getNombre(),
                 entity.getApellido1(),
                 entity.getApellido2(),
-                entity.getFechaNacimiento()
+                entity.getFechaNacimiento(),
+                entity.getCuentas().stream().map(CuentaBancariaEntityMapper::toDomain).toList()
         );
     }
 

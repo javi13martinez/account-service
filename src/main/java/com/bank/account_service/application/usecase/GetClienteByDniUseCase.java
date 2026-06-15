@@ -9,7 +9,7 @@ import com.bank.account_service.domain.port.out.ClienteRepositoryPort;
 
 public class GetClienteByDniUseCase {
 
-    private final ClienteRepositoryPort repository;
+    private ClienteRepositoryPort repository;
 
     public GetClienteByDniUseCase(ClienteRepositoryPort repository) {
         this.repository = repository;
@@ -25,6 +25,6 @@ public class GetClienteByDniUseCase {
                 .orElseThrow(() -> new ResourceNotFoundException("CLIENTE", "DNI", dni));
     }
 
-    private static final Pattern DNI_PATTERN =
+    private static Pattern DNI_PATTERN =
             Pattern.compile("\\d{8}[A-Z]");
 }

@@ -1,12 +1,9 @@
 package com.bank.account_service.infrastructure.entrypoint.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Schema(description = "ClienteDTO")
 public record ClienteDTO(
@@ -23,5 +20,8 @@ public record ClienteDTO(
         String apellido2,
 
         @Schema(example = "1959-09-12")
-        LocalDate fechaNacimiento
+        LocalDate fechaNacimiento,
+
+        @Schema(description = "CuentaBancariaDTO")
+        List<CuentaBancariaBaseDTO> cuentas
 ) {}

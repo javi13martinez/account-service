@@ -6,8 +6,9 @@ import java.util.Optional;
 import com.bank.account_service.domain.model.Cliente;
 
 public interface ClienteRepositoryPort {
-    Optional<Cliente> findByDni(final String dni);
+    Optional<Cliente> findByDni(String dni);
     List<Cliente> findAll();
     List<Cliente> findAdultos();
-    void save(final Cliente cliente);
+    List<Cliente> findClientesConSaldoMayorA(Double total);
+    Cliente save(Cliente cliente);
 }

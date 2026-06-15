@@ -1,27 +1,24 @@
 package com.bank.account_service.application.usecase;
 
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bank.account_service.domain.exception.InvalidValueException;
-import com.bank.account_service.domain.model.Cliente;
 import com.bank.account_service.domain.model.CuentaBancaria;
-import com.bank.account_service.domain.port.out.ClienteRepositoryPort;
 import com.bank.account_service.domain.port.out.CuentaBancariaRepositoryPort;
 
 public class CreateCuentaBancariaUseCase {
 
-    private final ClienteRepositoryPort clienteRepository;
-    private final CuentaBancariaRepositoryPort cuentaRepository;
+    private CuentaBancariaRepositoryPort cuentaRepository;
 
-    public CreateCuentaBancariaUseCase(CuentaBancariaRepositoryPort cuentaRepository, ClienteRepositoryPort clienteRepository) {
+    public CreateCuentaBancariaUseCase(CuentaBancariaRepositoryPort cuentaRepository) {
         this.cuentaRepository = cuentaRepository;
-        this.clienteRepository = clienteRepository;
     }
 
     @Transactional
-    public CuentaBancaria execute(final String dniCliente, final String tipoCuenta, final Double total) {
+    public CuentaBancaria execute(String dniCliente, String tipoCuenta, Double total) {
 
         if (!DNI_PATTERN.matcher(dniCliente).matches()) {
             throw new InvalidValueException("CUENTA BANCARIA", "DNI CLIENTE", dniCliente);
@@ -31,13 +28,9 @@ public class CreateCuentaBancariaUseCase {
             throw new InvalidValueException("CUENTA BANCARIA", "TOTAL", String.valueOf(total));
         }
 
-        if (clienteRepository.findByDni(dniCliente).isEmpty()) {
-            clienteRepository.save(new Cliente(dniCliente));
-        }
-
         return cuentaRepository.save(new CuentaBancaria(dniCliente, tipoCuenta, total));
     }
 
-    private static final Pattern DNI_PATTERN =
+    private static Pattern DNI_PATTERN =
             Pattern.compile("\\d{8}[A-Z]");
 }

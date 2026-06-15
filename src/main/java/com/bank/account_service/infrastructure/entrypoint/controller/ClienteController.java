@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bank.account_service.application.usecase.GetClienteByDniUseCase;
 import com.bank.account_service.application.usecase.GetClientesAdultosUseCase;
+import com.bank.account_service.application.usecase.GetClientesConSaldoMayorAUseCase;
 import com.bank.account_service.application.usecase.GetClientesUseCase;
 import com.bank.account_service.domain.model.Cliente;
 import com.bank.account_service.infrastructure.entrypoint.controller.GlobalExceptionHandler.ErrorResponse;
@@ -26,18 +27,21 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/clientes")
 @Tag(name = "Clientes", description = "Gestión de clientes")
 public class ClienteController {
-    private final GetClienteByDniUseCase getClienteByDniUseCase;
-    private final GetClientesUseCase getClientesUseCase;
-    private final GetClientesAdultosUseCase getClientesAdultosUseCase;
+    private GetClienteByDniUseCase getClienteByDniUseCase;
+    private GetClientesUseCase getClientesUseCase;
+    private GetClientesAdultosUseCase getClientesAdultosUseCase;
+    private GetClientesConSaldoMayorAUseCase getClientesConSaldoMayorAUseCase;
 
     public ClienteController(
             GetClienteByDniUseCase getClienteByDniUseCase,
             GetClientesUseCase getClientesUseCase,
-            GetClientesAdultosUseCase getClientesAdultosUseCase
+            GetClientesAdultosUseCase getClientesAdultosUseCase,
+            GetClientesConSaldoMayorAUseCase getClientesConSaldoMayorAUseCase
     ) {
         this.getClientesUseCase = getClientesUseCase;
         this.getClienteByDniUseCase = getClienteByDniUseCase;
         this.getClientesAdultosUseCase = getClientesAdultosUseCase;
+        this.getClientesConSaldoMayorAUseCase = getClientesConSaldoMayorAUseCase;
     }
 
     @Operation(
@@ -89,7 +93,7 @@ public class ClienteController {
     }
 
     @Operation(
-            summary = "GET CLIENTES",
+            summary = "GET CLIENTES ADULTOS",
             description = "Devuelve lista de los clientes mayores de edad"
     )
     @ApiResponses({
@@ -100,7 +104,23 @@ public class ClienteController {
             )
     })
     @GetMapping("/mayores-de-edad")
-    public List<ClienteDTO> getClientesMayoresDeEdad() {
+    public List<ClienteDTO> getClientesAdultos() {
         return getClientesAdultosUseCase.execute().stream().map(ClienteDtoMapper::toDTO).toList();
+    }
+
+    @Operation(
+            summary = "GET CLIENTES CON CUENTA SUPERIOR A TOTAL INDICADO",
+            description = "Devuelve lista de los clientes con saldo de cuenta superior a la cantidad indicada"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "CLIENTES FOUND",
+                    content = @Content(schema = @Schema(implementation = ClienteDTO.class))
+            )
+    })
+    @GetMapping("/con-cuenta-superior-a/{total}")
+    public List<ClienteDTO> getClientesConCuentaSuperiorA(@PathVariable Double total) {
+        return getClientesConSaldoMayorAUseCase.execute(total).stream().map(ClienteDtoMapper::toDTO).toList();
     }
 }

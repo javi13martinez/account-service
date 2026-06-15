@@ -6,20 +6,20 @@ import com.bank.account_service.domain.model.CuentaBancaria;
 import com.bank.account_service.domain.port.out.CuentaBancariaRepositoryPort;
 
 public class UpdateSaldoCuentaUseCase {
-    private final CuentaBancariaRepositoryPort repository;
+    private CuentaBancariaRepositoryPort repository;
 
     public UpdateSaldoCuentaUseCase(CuentaBancariaRepositoryPort repository) {
         this.repository = repository;
     }
 
-    public CuentaBancaria execute(final Long id, final Double total) {
+    public CuentaBancaria execute(Long id, Double total) {
 
         if (id == null) {
-            throw new InvalidValueException("CUENTA BANCARIA", "ID", String.valueOf(id));
+            throw new InvalidValueException("CUENTA BANCARIA", "ID", String.valueOf((Object) null));
         }
 
         if (total == null) {
-            throw new InvalidValueException("CUENTA BANCARIA", "TOTAL", String.valueOf(total));
+            throw new InvalidValueException("CUENTA BANCARIA", "TOTAL", String.valueOf((Object) null));
         }
 
         CuentaBancaria cuentaBancaria = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("CUENTA BANCARIA", "ID", id.toString()));

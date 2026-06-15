@@ -7,7 +7,7 @@ import com.bank.account_service.domain.port.out.ClienteRepositoryPort;
 
 public class GetClientesAdultosUseCase {
 
-    private final ClienteRepositoryPort repository;
+    private ClienteRepositoryPort repository;
 
     public GetClientesAdultosUseCase(ClienteRepositoryPort repository) {
         this.repository = repository;

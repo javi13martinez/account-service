@@ -10,7 +10,8 @@ public class ClienteDtoMapper {
                 cliente.getNombre(),
                 cliente.getApellido1(),
                 cliente.getApellido2(),
-                cliente.getFechaNacimiento()
+                cliente.getFechaNacimiento(),
+                cliente.getCuentas().stream().map(CuentaBancariaMapper::toBaseDTO).toList()
         );
     }
 }

@@ -14,7 +14,7 @@ import com.bank.account_service.infrastructure.persistence.repository.ClienteJpa
 @Repository
 public class ClienteRepositoryAdapter implements ClienteRepositoryPort {
 
-    private final ClienteJpaRepository jpaRepository;
+    private ClienteJpaRepository jpaRepository;
 
     public ClienteRepositoryAdapter(ClienteJpaRepository jpaRepository) {
         this.jpaRepository = jpaRepository;
@@ -38,7 +38,12 @@ public class ClienteRepositoryAdapter implements ClienteRepositoryPort {
     }
 
     @Override
-    public void save(Cliente cliente) {
-        ClienteEntityMapper.toDomain(jpaRepository.save(ClienteEntityMapper.toEntity(cliente)));
+    public List<Cliente> findClientesConSaldoMayorA(Double total) {
+        return jpaRepository.findClientesConSaldoMayorA(total).stream().map(ClienteEntityMapper::toDomain).toList();
+    }
+
+    @Override
+    public Cliente save(Cliente cliente) {
+        return ClienteEntityMapper.toDomain(jpaRepository.save(ClienteEntityMapper.toEntity(cliente)));
     }
 }
