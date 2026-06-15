@@ -1,11 +1,14 @@
 package com.bank.account_service.infrastructure.entrypoint.controller;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bank.account_service.application.usecase.GetClienteByDniUseCase;
+import com.bank.account_service.application.usecase.GetClientesUseCase;
 import com.bank.account_service.domain.model.Cliente;
 import com.bank.account_service.infrastructure.entrypoint.controller.GlobalExceptionHandler.ErrorResponse;
 import com.bank.account_service.infrastructure.entrypoint.dto.ClienteDTO;
@@ -22,10 +25,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/clientes")
 @Tag(name = "Clientes", description = "Gestión de clientes")
 public class ClienteController {
-    private final GetClienteByDniUseCase useCase;
+    private final GetClientesUseCase getClientesUseCase;
+    private final GetClienteByDniUseCase getClienteByDniUseCase;
 
-    public ClienteController(GetClienteByDniUseCase useCase) {
-        this.useCase = useCase;
+    public ClienteController(
+            GetClientesUseCase getClientesUseCase,
+            GetClienteByDniUseCase getClienteByDniUseCase
+    ) {
+        this.getClientesUseCase = getClientesUseCase;
+        this.getClienteByDniUseCase = getClienteByDniUseCase;
     }
 
     @Operation(
@@ -56,7 +64,23 @@ public class ClienteController {
                 example = "11111111A"
             )
             @PathVariable String dni) {
-        Cliente cliente = useCase.execute(dni);
+        Cliente cliente = getClienteByDniUseCase.execute(dni);
         return ClienteDtoMapper.toDTO(cliente);
+    }
+
+    @Operation(
+            summary = "GET CLIENTE BY DNI",
+            description = "Devuelve un cliente identificado por su DNI"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "CLIENTES FOUND",
+                    content = @Content(schema = @Schema(implementation = ClienteDTO.class))
+            )
+    })
+    @GetMapping
+    public List<ClienteDTO> getClientes() {
+        return getClientesUseCase.execute().stream().map(ClienteDtoMapper::toDTO).toList();
     }
 }

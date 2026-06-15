@@ -1,5 +1,6 @@
 package com.bank.account_service.infrastructure.persistence.adapter;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -22,6 +23,11 @@ public class ClienteRepositoryAdapter implements ClienteRepositoryPort {
     public Optional<Cliente> findByDni(String dni) {
         return jpaRepository.findById(dni)
                 .map(ClienteEntityMapper::toDomain);
+    }
+
+    @Override
+    public List<Cliente> findAll() {
+        return jpaRepository.findAll().stream().map(ClienteEntityMapper::toDomain).toList();
     }
 
     @Override
