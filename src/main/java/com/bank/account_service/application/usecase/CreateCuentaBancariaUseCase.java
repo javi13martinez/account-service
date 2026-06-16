@@ -1,13 +1,12 @@
 package com.bank.account_service.application.usecase;
 
-import java.util.Optional;
-import java.util.regex.Pattern;
-
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bank.account_service.domain.exception.InvalidValueException;
 import com.bank.account_service.domain.model.CuentaBancaria;
 import com.bank.account_service.domain.port.out.CuentaBancariaRepositoryPort;
+
+import static com.bank.account_service.shared.SharedRegex.DNI_PATTERN;
 
 public class CreateCuentaBancariaUseCase {
 
@@ -30,7 +29,4 @@ public class CreateCuentaBancariaUseCase {
 
         return cuentaRepository.save(new CuentaBancaria(dniCliente, tipoCuenta, total));
     }
-
-    private static Pattern DNI_PATTERN =
-            Pattern.compile("\\d{8}[A-Z]");
 }

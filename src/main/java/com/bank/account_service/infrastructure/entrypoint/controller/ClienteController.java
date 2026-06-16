@@ -120,7 +120,7 @@ public class ClienteController {
             )
     })
     @GetMapping("/con-cuenta-superior-a/{total}")
-    public List<ClienteDTO> getClientesConCuentaSuperiorA(@PathVariable Double total) {
+    public List<ClienteDTO> getClientesConSaldoMayorA(@PathVariable Double total) {
         return getClientesConSaldoMayorAUseCase.execute(total).stream().map(ClienteDtoMapper::toDTO).toList();
     }
 }
