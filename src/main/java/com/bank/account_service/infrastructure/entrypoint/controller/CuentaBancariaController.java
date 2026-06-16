@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bank.account_service.application.usecase.CreateCuentaBancariaUseCase;
 import com.bank.account_service.application.usecase.UpdateSaldoCuentaUseCase;
 import com.bank.account_service.infrastructure.entrypoint.controller.GlobalExceptionHandler.ErrorResponse;
-import com.bank.account_service.infrastructure.entrypoint.dto.ClienteDTO;
 import com.bank.account_service.infrastructure.entrypoint.dto.CreateCuentaBancariaDTO;
 import com.bank.account_service.infrastructure.entrypoint.dto.CuentaBancariaDTO;
 import com.bank.account_service.infrastructure.entrypoint.dto.UpdateSaldoCuentaDTO;
@@ -46,7 +45,7 @@ public class CuentaBancariaController {
             @ApiResponse(
                     responseCode = "201",
                     description = "CUENTA BANCARIA CREATED",
-                    content = @Content(schema = @Schema(implementation = ClienteDTO.class))
+                    content = @Content(schema = @Schema(implementation = CuentaBancariaDTO.class))
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -73,7 +72,7 @@ public class CuentaBancariaController {
             @ApiResponse(
                     responseCode = "200",
                     description = "CUENTA BANCARIA UPDATED",
-                    content = @Content(schema = @Schema(implementation = ClienteDTO.class))
+                    content = @Content(schema = @Schema(implementation = CuentaBancariaDTO.class))
             ),
             @ApiResponse(
                     responseCode = "404",
