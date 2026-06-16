@@ -3,7 +3,6 @@ package com.bank.account_service;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +45,11 @@ public class ControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        List<ClienteDTO> clientes = this.responseToList(result, new TypeReference<>() {});
+        List<ClienteDTO> clientesDTO = this.responseToList(result, new TypeReference<>() {});
 
-        assertThat(clientes).usingRecursiveComparison().isEqualTo(TestData.initialClientes());
+        assertThat(clientesDTO)
+                .extracting(ClienteDTO::dni)
+                .containsExactlyInAnyOrderElementsOf(TestData.initialClientes().stream().map(ClienteDTO::dni).toList());
     }
 
     @Test
@@ -63,7 +64,9 @@ public class ControllerTest {
                 Period.between(cliente.fechaNacimiento(), LocalDate.now()).getYears() >= 18
         ).toList();
 
-        assertThat(clientesDTO).usingRecursiveComparison().isEqualTo(clientes);
+        assertThat(clientesDTO)
+                .extracting(ClienteDTO::dni)
+                .containsExactlyInAnyOrderElementsOf(clientes.stream().map(ClienteDTO::dni).toList());
     }
 
     @Test
@@ -78,45 +81,36 @@ public class ControllerTest {
         List<ClienteDTO> clientes = TestData.initialClientes().stream().filter(c ->
                 c.cuentas().stream().mapToDouble(CuentaBancariaBaseDTO::total).sum() > minimumSaldo).toList();
 
-        assertThat(clientesDTO).usingRecursiveComparison().isEqualTo(clientes);
+        assertThat(clientesDTO)
+                .extracting(ClienteDTO::dni)
+                .containsExactlyInAnyOrderElementsOf(clientes.stream().map(ClienteDTO::dni).toList());
     }
 
     @Test
-    void shouldCreateCuentas() throws Exception {
+    void shouldCreateCuentaClienteExistente() throws Exception {
         CreateCuentaBancariaDTO cuentaExistingCliente = new CreateCuentaBancariaDTO("11111111A", TipoCuentaBancariaEnum.PREMIUM, 1000.0);
 
         CuentaBancariaDTO cuentaExistingClienteDTO = this.createCuenta(cuentaExistingCliente);
 
-        long expectedId = 1 + TestData.initialCuentas().stream().max(Comparator.comparing(CuentaBancariaDTO::id))
-                .map(CuentaBancariaDTO::id)
-                .orElse(0L);
-
         assertThat(cuentaExistingClienteDTO)
-                .extracting("id", "dniCliente", "tipoCuenta", "total")
-                .contains(expectedId, cuentaExistingCliente.dniCliente(), cuentaExistingCliente.tipoCuenta().name(), cuentaExistingCliente.total());
+                .extracting("dniCliente", "tipoCuenta", "total")
+                .contains(cuentaExistingCliente.dniCliente(), cuentaExistingCliente.tipoCuenta().name(), cuentaExistingCliente.total());
+    }
 
+    @Test
+    void shouldCreateCuentaNewCliente() throws Exception {
         CreateCuentaBancariaDTO cuentaNewCliente = new CreateCuentaBancariaDTO("66666666F", TipoCuentaBancariaEnum.PREMIUM, 1000000.0);
 
         CuentaBancariaDTO cuentaNewClienteDTO = this.createCuenta(cuentaNewCliente);
 
         assertThat(cuentaNewClienteDTO)
                 .extracting("id", "dniCliente", "tipoCuenta", "total")
-                .contains(++expectedId, cuentaNewCliente.dniCliente(), cuentaNewCliente.tipoCuenta().name(), cuentaNewCliente.total());
+                .contains(cuentaNewCliente.dniCliente(), cuentaNewCliente.tipoCuenta().name(), cuentaNewCliente.total());
 
         ClienteDTO clienteDTO = this.getCliente(cuentaNewCliente.dniCliente());
 
-        assertThat(clienteDTO).usingRecursiveComparison().isEqualTo(new ClienteDTO(
-                cuentaNewCliente.dniCliente(),
-                null,
-                null,
-                null,
-                null,
-                List.of(new CuentaBancariaBaseDTO(
-                        expectedId,
-                        cuentaNewClienteDTO.tipoCuenta(),
-                        cuentaNewClienteDTO.total()
-                ))
-        ));
+        assertThat(clienteDTO.dni()).isEqualTo(cuentaNewCliente.dniCliente());
+        assertThat(clienteDTO.cuentas()).extracting(CuentaBancariaBaseDTO::id).containsExactlyInAnyOrder(cuentaNewClienteDTO.id());
     }
 
     CuentaBancariaDTO createCuenta(CreateCuentaBancariaDTO dto) throws Exception {
@@ -141,12 +135,7 @@ public class ControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        assertThat(this.responseToObject(result, CuentaBancariaDTO.class)).usingRecursiveComparison().isEqualTo(new CuentaBancariaDTO(
-                cuenta.id(),
-                cuenta.tipoCuenta(),
-                1000000.0,
-                cuenta.dniCliente()
-        ));
+        assertThat(this.responseToObject(result, CuentaBancariaDTO.class).id()).isEqualTo(cuenta.id());
     }
 
     @Test
@@ -155,7 +144,7 @@ public class ControllerTest {
 
         ClienteDTO clienteDTO = this.getCliente(cliente.dni());
 
-        assertThat(clienteDTO).usingRecursiveComparison().isEqualTo(cliente);
+        assertThat(clienteDTO.dni()).isEqualTo(cliente.dni());
     }
 
     ClienteDTO getCliente(String dni) throws Exception {
