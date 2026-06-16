@@ -1,0 +1,14 @@
+package com.bank.account_service.domain.port.out;
+
+import java.util.List;
+import java.util.Optional;
+
+import com.bank.account_service.domain.model.Cliente;
+
+public interface ClienteRepositoryPort {
+    Optional<Cliente> findByDni(String dni);
+    List<Cliente> findAll();
+    List<Cliente> findAdultos();
+    List<Cliente> findClientesConSaldoMayorA(Double total);
+    Cliente save(Cliente cliente);
+}
